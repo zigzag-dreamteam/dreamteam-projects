@@ -36,10 +36,30 @@ app.delete('/products/:id', async (req, res) => {
     }
 })
 
+
 app.patch('/products/:id', async (req, res) => {
     try {
         await Product.increment({ stock: req.body.stock }, { where: { id: req.params.id } })
         res.status(200).json({ message: 'stock product has been updated' })
+    } catch (error) {
+        res.status(500).json({ messsage: 'internal server error' })
+    }
+})
+
+app.get('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findOne({ where: { id: req.params.id } })
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(500).json({ messsage: 'internal server error' })
+    }
+})
+
+app.put('/products/:id', async (req, res) => {
+    try {
+        let { name, price, stock } = req.body
+        await Product.update({ name, price, stock }, { where: { id: req.params.id } })
+        res.status(201).json({ message: 'product has been updated' })
     } catch (error) {
         res.status(500).json({ messsage: 'internal server error' })
     }
