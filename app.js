@@ -36,4 +36,23 @@ app.delete('/products/:id', async (req, res) => {
     }
 })
 
+app.get('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findOne({ where: { id: req.params.id } })
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(500).json({ messsage: 'internal server error' })
+    }
+})
+
+app.put('/products/:id', async (req, res) => {
+    try {
+        let { name, price, stock } = req.body
+        await Product.update({ name, price, stock }, { where: { id: req.params.id } })
+        res.status(201).json({ message: 'product has been updated' })
+    } catch (error) {
+        res.status(500).json({ messsage: 'internal server error' })
+    }
+})
+
 app.listen(3000)
