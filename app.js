@@ -36,4 +36,13 @@ app.delete('/products/:id', async (req, res) => {
     }
 })
 
+app.get('/products/:id', async (req, res) => {
+    try {
+        const product = await Product.findOne({ where: { id: req.params.id } })
+        res.status(200).json(product)
+    } catch (error) {
+        res.status(500).json({ messsage: 'internal server error' })
+    }
+})
+
 app.listen(3000)
